@@ -2,6 +2,8 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import { Sale } from "../../models/sales";
+import { BASE_URL } from "../../utils/request";
 
 import NotificationButton from '../notification-button';
 import './styles.css';
@@ -14,9 +16,11 @@ function SalesCard() {
     const [minDate, setMinDate] = useState(min);
     const [maxDate, setMaxDate] = useState(max);
 
+    const [sales, setSales] = useState<Sale[]>([]);
+
     useEffect(() => {
-        axios.get("http://localhost:8080/sales").then(response => {
-            console.log(response.data);
+        axios.get(`${BASE_URL}/sales`).then(response => {
+            setSales(response.data.content);
         })
     });
 
@@ -55,45 +59,25 @@ function SalesCard() {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <th className="show992">#341</th>
-                            <td className="show576">04/09/2022</td>
-                            <td>Rodolfo</td>
-                            <th className="show992">15</th>
-                            <th className="show992">11</th>
-                            <td>R$ 1000</td>
-                            <td>
-                                <div className="dsmeta-red-btn-container">
-                                    <NotificationButton />
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th className="show992">#341</th>
-                            <td className="show576">04/09/2022</td>
-                            <td>Edilaine</td>
-                            <th className="show992">15</th>
-                            <th className="show992">11</th>
-                            <td>R$ 1000</td>
-                            <td>
-                                <div className="dsmeta-red-btn-container">
-                                    <NotificationButton />
-                                </div>
-                            </td>
-                        </tr>
-                        <tr>
-                            <th className="show992">#341</th>
-                            <td className="show576">04/09/2022</td>
-                            <td>Isabel</td>
-                            <th className="show992">15</th>
-                            <th className="show992">11</th>
-                            <td>R$ 1000</td>
-                            <td>
-                                <div className="dsmeta-red-btn-container">
-                                    <NotificationButton />
-                                </div>
-                            </td>
-                        </tr>
+                        {
+                            sales.map(sale => {
+                                return (
+                                    <tr key={sale.id}>
+                                        <th className="show992">#{sale.id}</th>
+                                        <td className="show576">{new Date(sale.date).toLocaleDateString()}</td>
+                                        <td>{sale.sellerName}</td>
+                                        <th className="show992">{sale.visited}</th>
+                                        <th className="show992">{sale.deals}</th>
+                                        <td>R$ {sale.amount.toFixed(2)}</td>
+                                        <td>
+                                            <div className="dsmeta-red-btn-container">
+                                                <NotificationButton />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )
+                            })
+                        }
                     </tbody>
                 </table>
             </div>
