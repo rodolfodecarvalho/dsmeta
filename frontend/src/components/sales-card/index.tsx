@@ -66,15 +66,15 @@ function SalesCard() {
                             sales.map(sale => {
                                 return (
                                     <tr key={sale.id}>
-                                        <th className="show992">#{sale.id}</th>
+                                        <td className="show992">#{sale.id}</td>
                                         <td className="show576">{new Date(sale.date).toLocaleDateString()}</td>
                                         <td>{sale.sellerName}</td>
-                                        <th className="show992">{sale.visited}</th>
-                                        <th className="show992">{sale.deals}</th>
+                                        <td className="show992">{sale.visited}</td>
+                                        <td className="show992">{sale.deals}</td>
                                         <td>R$ {sale.amount.toFixed(2)}</td>
                                         <td>
                                             <div className="dsmeta-red-btn-container">
-                                                <NotificationButton />
+                                                <NotificationButton saleId={sale.id} />
                                             </div>
                                         </td>
                                     </tr>
